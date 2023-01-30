@@ -127,17 +127,17 @@ namespace MagicVilla_VillaApi.Controllers
             {
                 return BadRequest();
             }
-            if (await _db.Villas.FirstOrDefaultAsync(u => u.Id == id) == null)
+            if (await _db.Villas.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id) == null)
             {
                 return NotFound();
             }
             var villaToUpdate = await _db.Villas.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
-            VillaUpdateDto villaDTO =_mapper.Map<VillaUpdateDto>(villaToUpdate);
+            VillaUpdateDto villaDTO =_mapper.Map<Villa,VillaUpdateDto>(villaToUpdate);
             
             //this is the syntax to apply changes in patch
             // as ref chack https://jsonpatch.com/
             patchDto.ApplyTo(villaDTO, ModelState);
-            Villa model = _mapper.Map<Villa>(villaDTO);
+            Villa model = _mapper.Map<VillaUpdateDto, Villa>(villaDTO);
             _db.Villas.Update(model);
             await _db.SaveChangesAsync();
             if (!ModelState.IsValid)

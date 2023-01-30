@@ -44,10 +44,10 @@ namespace MagicVilla_VillaApi.Repository
             }
             return filterData; 
         }
-        public void delete(int id)
+        public async void delete(int id)
         {
-         //var filterData = await _dbSet.FirstOrDefaultAsync();
-         //   _dbSet.Remove(id);
+            var filterData = await _dbSet.FirstOrDefaultAsync(u=>u.Id==id);
+            _dbSet.Remove(filterData);
         }
     }
 }
