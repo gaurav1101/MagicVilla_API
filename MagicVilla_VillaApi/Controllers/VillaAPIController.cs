@@ -137,8 +137,8 @@ namespace MagicVilla_VillaApi.Controllers
             //this is the syntax to apply changes in patch
             // as ref chack https://jsonpatch.com/
             patchDto.ApplyTo(villaDTO, ModelState);
-            Villa model = _mapper.Map<VillaUpdateDto, Villa>(villaDTO);
-            _db.Villas.Update(model);
+
+            _db.Villas.Update(_mapper.Map<VillaUpdateDto, Villa>(villaDTO));
             await _db.SaveChangesAsync();
             if (!ModelState.IsValid)
             {
