@@ -7,47 +7,19 @@ using System.Linq.Expressions;
 
 namespace MagicVilla_VillaApi.Repository
 {
-    public class VillaRepository : IVillaRepository
+    public class VillaRepository : Repository<Villa> ,IVillaRepository
     {
         private readonly ApplicationDBContext _db;
-        private readonly DbSet<Villa> _dbSet;
-
-        public VillaRepository(ApplicationDBContext db) 
+        public VillaRepository(ApplicationDBContext db) :base(db) 
         { 
             _db = db;
-            _dbSet = db.Set<Villa>();
         }
 
-        public async Task AddVilla(Villa villa)
+        public async Task<Villa> UpdateAsync(Villa villa)
         {
-            await _db.Villas.AddAsync(villa);
-        }
-        public async Task<Villa> getById(int id)
-        {
-           var villa= await _db.Villas.FirstOrDefaultAsync(x => x.Id == id);
-            if (villa != null)
-            {
+                _db.Villas.Update(villa);
+                await _db.SaveChangesAsync();
                 return villa;
-            }
-            return villa;
-        }
-        public async Task<IEnumerable<Villa>> getAll()
-        {
-           return await _db.Villas.ToListAsync();
-        }
-        public async Task<Villa> getFirstOrDefault(Expression<Func<Villa,bool>> filter)
-        {
-            Villa filterData=null;
-            if (filter != null)
-            {
-                filterData = await _dbSet.FirstOrDefaultAsync(filter);
-            }
-            return filterData; 
-        }
-        public async void delete(int id)
-        {
-            var filterData = await _dbSet.FirstOrDefaultAsync(u=>u.Id==id);
-            _dbSet.Remove(filterData);
         }
     }
 }

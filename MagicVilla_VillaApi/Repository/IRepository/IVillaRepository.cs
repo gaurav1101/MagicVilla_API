@@ -3,12 +3,8 @@ using System.Linq.Expressions;
 
 namespace MagicVilla_VillaApi.Repository.IRepository
 {
-    public interface IVillaRepository
+    public interface IVillaRepository: IRepository<Villa>
     {
-        Task AddVilla(Villa villa);
-        Task<IEnumerable<Villa>> getAll();
-        Task<Villa> getFirstOrDefault(Expression<Func<Villa, bool>> filter);
-        Task<Villa> getById(int id);
-        void delete(int id);
+        Task<Villa> UpdateAsync(Villa entity);
     }
 }

@@ -9,6 +9,8 @@ namespace MagicVilla_VillaApi.Data
         {
         }
         public DbSet<Villa> Villas { get; set; }
+        public DbSet<VillaNumber> VillaNumbers { get; set; }
+
 
         //To seed database with some dummy data using migrations
         protected override void OnModelCreating(ModelBuilder modelBuilder)
