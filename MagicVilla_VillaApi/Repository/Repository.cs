@@ -22,25 +22,41 @@ namespace MagicVilla_VillaApi.Repository
                 await _dbSet.AddAsync(entity);
             SaveAsync();
             }
-
-            public async Task<List<T>> getAllAsync(Expression<Func<T, bool>> filter = null)
+        //u=>u.id==id
+            public async Task<List<T>> getAllAsync(Expression<Func<T, bool>> filter = null,string? includeProperties=null)
             {
                 IQueryable<T> query = _dbSet;
                 if (filter != null)
                 {
                     query = query.Where(filter);
                 }
+            if (includeProperties != null)
+            {
+                foreach (var prop in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query=query.Include(prop);
+                }
+
+            }
                 return await query.ToListAsync();
             }
 
-            public async Task<T> getFirstOrDefaultAsync(Expression<Func<T, bool>> filter, bool tracked)
+            public async Task<T> getFirstOrDefaultAsync(Expression<Func<T, bool>> filter, bool tracked, string? includeProperties = null)
             {
                 IQueryable<T> query = _dbSet;
                 if (!tracked)
                 {
                     query = query.AsNoTracking();
                 }
-                if (filter != null)
+            if (includeProperties != null)
+            {
+                foreach (var prop in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(prop);
+                }
+
+            }
+            if (filter != null)
                 {
                     query = query.Where(filter);
                 }
