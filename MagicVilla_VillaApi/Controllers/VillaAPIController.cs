@@ -46,6 +46,7 @@ namespace MagicVilla_VillaApi.Controllers
                 IEnumerable<Villa> list = await _villaRepository.getAllAsync();
                 _response.Result = _mapper.Map<List<VillaDto>>(list);
                 _response.StatusCode = System.Net.HttpStatusCode.OK;
+                
                 return Ok(_response);
             }
             catch(Exception ex)
@@ -147,7 +148,7 @@ namespace MagicVilla_VillaApi.Controllers
             return Ok(_response);
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int}" , Name ="UpdateVilla")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -56,7 +56,7 @@ namespace MagicVilla_VillaApi.Repository
 
             public async void SaveAsync()
             {
-                _db.SaveChangesAsync();
+            _db.SaveChangesAsync();
             }
 
     }

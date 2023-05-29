@@ -9,7 +9,7 @@ namespace MagicVilla_Web.Services
 {
     public class BaseService : IBaseService
     {
-        public Response responseModel { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Response responseModel { get ; set ; }
         public IHttpClientFactory httpClient { get;set; }
 
         public BaseService(IHttpClientFactory httpClient)
@@ -28,7 +28,7 @@ namespace MagicVilla_Web.Services
                 httpRequest.RequestUri = new Uri(apirequest.url);
                 if (apirequest.Data != null)
                 {
-                    httpRequest.Content = new StringContent(JsonConvert.SerializeObject(apirequest.Data),Encoding.UTF8,"applicatio/json");
+                    httpRequest.Content = new StringContent(JsonConvert.SerializeObject(apirequest.Data),Encoding.UTF8,"application/json");
                 }
                 switch (apirequest.apiType)
                 {
