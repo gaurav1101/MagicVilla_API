@@ -52,7 +52,7 @@ namespace MagicVilla_Web.Services
                 try
                 {
                     var apiResponse = JsonConvert.DeserializeObject<Response>(apiContent);
-                    if (apiResponse.StatusCode!=HttpStatusCode.OK)
+                    if (apiResponse.StatusCode==HttpStatusCode.BadRequest || apiResponse.StatusCode==HttpStatusCode.NotFound)
                     {
                         apiResponse.ErrorMessage = new List<string> { "Encountered with an Error Please review your Request" };
                         apiResponse.StatusCode = HttpStatusCode.NotFound;
