@@ -31,7 +31,12 @@ namespace MagicVilla_VillaApi.Repository
                                                             && u.Password == loginRequestDto.Password);
             if (user == null)
             {
-                return null;
+                LoginResponseDto loginResponse1 = new LoginResponseDto
+                {
+                    Token = "",  //to convert token to string
+                    User = null
+                };
+                return loginResponse1;
             }
 
             //if user is foud then we will do JWT auth and return a token
@@ -60,9 +65,7 @@ namespace MagicVilla_VillaApi.Repository
 
         public async Task<LocalUser> Register(RegisterationRequestDto registerationRequestDto)
         {
-            LocalUser _user=null;
-            if (IsUniqueUser(registerationRequestDto.UserName))
-            {
+            LocalUser _user=
                  _user = new LocalUser
                 {
                     UserName = registerationRequestDto.UserName,
@@ -72,13 +75,7 @@ namespace MagicVilla_VillaApi.Repository
                 };
                  await _dbContext.LocalUsers.AddAsync(_user);
                  await _dbContext.SaveChangesAsync();
-               
-            }
-            else
-            {
-                
-            }
-            return _user;
+                return _user;
         }
     }
 }
