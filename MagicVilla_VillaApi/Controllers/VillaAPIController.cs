@@ -38,8 +38,9 @@ namespace MagicVilla_VillaApi.Controllers
           //  _repository = repository;
         }
 
-        [Authorize]
+       
         [HttpGet]
+       
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Response>> GetVillas()
         {

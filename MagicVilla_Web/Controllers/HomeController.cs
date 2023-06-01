@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MagicVilla_Utility;
 using MagicVilla_Web.Models;
 using MagicVilla_Web.Models.Dto;
 using MagicVilla_Web.Services.Interfaces;
@@ -10,18 +11,19 @@ namespace MagicVilla_Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IVillaNumberService _service;
+        private readonly IVillaService _service;
         private readonly IMapper _mapper;
 
-        public HomeController(IVillaNumberService villaService, IMapper mapper)
+        public HomeController(IVillaService villaService, IMapper mapper)
         {
             _service = villaService;
             _mapper = mapper;
         }
 
+
         public async Task<IActionResult> Index()
         {
-            var response = await _service.GetAllAsync<Response>();
+            var response = await _service.GetAllAsync<Response>(SD.AuthToken);
             List<VillaDto> villaDtos = new();
             if (response != null && response.IsSuccess)
             {

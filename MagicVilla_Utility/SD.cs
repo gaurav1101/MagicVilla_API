@@ -9,5 +9,6 @@
             POST,
             DELETE
         }
+        public static string AuthToken="JWT Token";
     }
 }

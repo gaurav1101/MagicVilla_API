@@ -1,8 +1,10 @@
-﻿using MagicVilla_Utility;
+﻿using AutoMapper.Internal;
+using MagicVilla_Utility;
 using MagicVilla_Web.Models;
 using Newtonsoft.Json;
 using System.Linq.Expressions;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace MagicVilla_Web.Services
@@ -44,6 +46,10 @@ namespace MagicVilla_Web.Services
                         default:
                         httpRequest.Method = HttpMethod.Get;
                         break;
+                }
+                if (!string.IsNullOrEmpty(apirequest.Token))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apirequest.Token);
                 }
                 HttpResponseMessage httpResponse = null; 
                 httpResponse = await client.SendAsync(httpRequest);

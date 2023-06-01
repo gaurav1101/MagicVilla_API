@@ -19,6 +19,7 @@ namespace MagicVilla_VillaApi.Controllers
         }
 
         [HttpPost("Register")]
+        [ValidateAntiForgeryToken]
         public ActionResult<Response> Register(RegisterationRequestDto registerationRequest)
         {
             bool valid = _userRepository.IsUniqueUser(registerationRequest.UserName);
@@ -42,6 +43,7 @@ namespace MagicVilla_VillaApi.Controllers
         }
 
         [HttpPost("Login")]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginRequestDto loginRequest)
         {
             var loginUser= _userRepository.Login(loginRequest);
