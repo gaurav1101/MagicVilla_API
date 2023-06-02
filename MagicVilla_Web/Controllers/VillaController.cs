@@ -58,7 +58,7 @@ namespace MagicVilla_Web.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       // [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateVilla(int villaId)
         {
             var response=await _service.GetAsync<Response>(villaId, HttpContext.Session.GetString(SD.AuthToken));

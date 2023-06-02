@@ -40,7 +40,6 @@ namespace MagicVilla_VillaApi.Controllers
 
        
         [HttpGet]
-       
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Response>> GetVillas()
         {
