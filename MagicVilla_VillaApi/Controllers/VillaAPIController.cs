@@ -46,7 +46,8 @@ namespace MagicVilla_VillaApi.Controllers
         
         [ResponseCache(CacheProfileName ="Default30")] // To use global caching 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Response>> GetVillas([FromQuery(Name ="FilterOccupancy")]int? occupancy)  //To enable filter in API response
+        public async Task<ActionResult<Response>> GetVillas([FromQuery(Name ="FilterOccupancy")]int? occupancy,
+            [FromQuery]string? search)  //To enable filter and Search in API response
         {
             try
             {
@@ -60,6 +61,11 @@ namespace MagicVilla_VillaApi.Controllers
                 {
                     _logger.LogInformation("Getting all Villas", "");
                     list = await _villaRepository.getAllAsync();
+                }
+
+                if (search != null) // To enable search in API without DB hit
+                {
+                    list=list.Where(u=>u.Name.ToLower().Contains(search)|| u.Amenity.ToLower().Contains(search));
                 }
                     _response.Result = _mapper.Map<List<VillaDto>>(list);
                     _response.StatusCode = System.Net.HttpStatusCode.OK;
