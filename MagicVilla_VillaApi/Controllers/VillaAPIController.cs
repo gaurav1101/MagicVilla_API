@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -67,8 +69,17 @@ namespace MagicVilla_VillaApi.Controllers
                 {
                     list=list.Where(u=>u.Name.ToLower().Contains(search)|| u.Amenity.ToLower().Contains(search));
                 }
+                Pagination pagination = new Pagination
+                {
+                    pageSize = pageSize,
+                    pageNumber = pageNumber
+                };
+
+                //To send pagination info in response headers
+                    Response.Headers.Add("X-Pagination",System.Text.Json.JsonSerializer.Serialize(pagination));
                     _response.Result = _mapper.Map<List<VillaDto>>(list);
                     _response.StatusCode = System.Net.HttpStatusCode.OK;
+                    
                      return Ok(_response);
             }
             catch(Exception ex)
