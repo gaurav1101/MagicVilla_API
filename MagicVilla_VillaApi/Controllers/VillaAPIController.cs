@@ -41,7 +41,8 @@ namespace MagicVilla_VillaApi.Controllers
        
         [HttpGet]
         //[ResponseCache(Location=ResponseCacheLocation.None, NoStore =true)] //By this caching will be disabled
-        [ResponseCache(Duration =30)]  ////To enable cache
+        //[ResponseCache(Duration =30)]  ////To enable cache
+        [ResponseCache(CacheProfileName ="Default30")] // To use global caching 
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Response>> GetVillas()
         {

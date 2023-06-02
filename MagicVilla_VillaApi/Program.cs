@@ -25,7 +25,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(option =>
 {
-    option.ReturnHttpNotAcceptable = false;
+    //To enable global caching in your project
+    option.CacheProfiles.Add("Default30",
+        new Microsoft.AspNetCore.Mvc.CacheProfile()
+        {
+            Duration = 30
+        });
+    //option.ReturnHttpNotAcceptable = false;
 }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 
 //changes to be for to implement Authentication of any API
