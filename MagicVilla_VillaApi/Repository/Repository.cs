@@ -20,7 +20,7 @@ namespace MagicVilla_VillaApi.Repository
             public async Task CreateAsync(T entity)
             {
                 await _dbSet.AddAsync(entity);
-            SaveAsync();
+                SaveAsync();
             }
         //u=>u.id==id
             public async Task<List<T>> getAllAsync(Expression<Func<T, bool>> filter = null,string? includeProperties=null)

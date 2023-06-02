@@ -41,24 +41,35 @@ namespace MagicVilla_VillaApi.Controllers
        
         [HttpGet]
         //[ResponseCache(Location=ResponseCacheLocation.None, NoStore =true)] //By this caching will be disabled
+        
         //[ResponseCache(Duration =30)]  ////To enable cache
+        
         [ResponseCache(CacheProfileName ="Default30")] // To use global caching 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Response>> GetVillas()
+        public async Task<ActionResult<Response>> GetVillas([FromQuery(Name ="FilterOccupancy")]int? occupancy)  //To enable filter in API response
         {
             try
             {
-                _logger.LogInformation("Getting all Villas", "");
-                IEnumerable<Villa> list = await _villaRepository.getAllAsync();
-                _response.Result = _mapper.Map<List<VillaDto>>(list);
-                _response.StatusCode = System.Net.HttpStatusCode.OK;
-                
-                return Ok(_response);
+                IEnumerable<Villa> list;
+                if (occupancy>0)
+                {
+                    _logger.LogInformation("Getting all Villas", "");
+                    list = (IEnumerable<Villa>)await _villaRepository.getAllAsync(u => u.Occupancy == occupancy);
+                }
+                else
+                {
+                    _logger.LogInformation("Getting all Villas", "");
+                    list = await _villaRepository.getAllAsync();
+                }
+                    _response.Result = _mapper.Map<List<VillaDto>>(list);
+                    _response.StatusCode = System.Net.HttpStatusCode.OK;
+                     return Ok(_response);
             }
             catch(Exception ex)
             {
                 _response.IsSuccess = false;
                 _response.ErrorMessage = new List<string>() { ex.ToString() };
+                _response.StatusCode = HttpStatusCode.BadRequest;
             }
             return _response;
         }
