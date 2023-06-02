@@ -40,6 +40,8 @@ namespace MagicVilla_VillaApi.Controllers
 
        
         [HttpGet]
+        //[ResponseCache(Location=ResponseCacheLocation.None, NoStore =true)] //By this caching will be disabled
+        [ResponseCache(Duration =30)]  ////To enable cache
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Response>> GetVillas()
         {
@@ -63,6 +65,7 @@ namespace MagicVilla_VillaApi.Controllers
        
         [HttpGet("{id:int}", Name ="GetVilla")]
         [Authorize]
+        [ResponseCache(Duration = 30)] //To enable cache
         [ProducesResponseType(StatusCodes.Status200OK,Type=typeof(VillaDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -92,6 +92,9 @@ builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 //builder.Services.AddSingleton<ILogging, Logging>();
 
+//To Enable Caching in the project
+builder.Services.AddResponseCaching();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
