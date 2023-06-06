@@ -14,20 +14,20 @@ namespace MagicVilla_Web.Controllers
 {
     public class VillaNumberController : Controller
     {
-        private readonly IVillaNumberService _service;
+        private readonly IVillaNumberService _numberService;
         private readonly IMapper _mapper;
         private readonly IVillaService _villa;
         private string token;
         public VillaNumberController(IVillaService villa,IVillaNumberService villaService, IMapper mapper)
         {
-            _service = villaService;
+            _numberService = villaService;
             _mapper = mapper;
             _villa = villa;
         }
 
         public async Task<IActionResult> IndexVillaNumber()
         {
-            var response = await _service.GetAllAsync<Response>(HttpContext.Session.GetString(SD.AuthToken));
+            var response = await _numberService.GetAllAsync<Response>(HttpContext.Session.GetString(SD.AuthToken));
             List<VillaNumberDto> villaDtos = new();
             if (response != null && response.IsSuccess)
             {
@@ -59,7 +59,7 @@ namespace MagicVilla_Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = await _service.CreateAsync<Response>(_mapper.Map<VillaNumberCreateDto>(vm.villaNumberDto), HttpContext.Session.GetString(SD.AuthToken));
+                var response = await _numberService.CreateAsync<Response>(_mapper.Map<VillaNumberCreateDto>(vm.villaNumberDto), HttpContext.Session.GetString(SD.AuthToken));
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexVillaNumber));
@@ -92,7 +92,7 @@ namespace MagicVilla_Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = await _service.GetAsync<Response>(Id, HttpContext.Session.GetString(SD.AuthToken));
+                var response = await _numberService.GetAsync<Response>(Id, HttpContext.Session.GetString(SD.AuthToken));
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexVillaNumber));
@@ -105,7 +105,7 @@ namespace MagicVilla_Web.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateVillaNumber(VillaNumberUpdateDto update)
         {
-            var response = await _service.UpdateAsync<Response>(update, HttpContext.Session.GetString(SD.AuthToken));
+            var response = await _numberService.UpdateAsync<Response>(update, HttpContext.Session.GetString(SD.AuthToken));
             VillaNumberCreateVM createDtoVm = new();
         
             return View(createDtoVm);

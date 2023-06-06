@@ -1,7 +1,11 @@
+using MagicVilla_VillaApi.Data;
+using MagicVilla_VillaApi.Models;
 using MagicVilla_Web;
 using MagicVilla_Web.Services;
 using MagicVilla_Web.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +29,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
 
 //To enable Authorisation and make use of [Authorize()] congiure like this
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
