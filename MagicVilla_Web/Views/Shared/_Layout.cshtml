@@ -41,7 +41,7 @@
                             </li>
                            
                         }
-                        else 
+                        else if ((http.HttpContext.Session.GetString(SD.AuthToken) == null))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark"  asp-controller="Auth" asp-action="Login">Login</a>

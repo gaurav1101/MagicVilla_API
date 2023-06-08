@@ -2,6 +2,7 @@
 using MagicVilla_Utility;
 using MagicVilla_Web.Models;
 using MagicVilla_Web.Models.Dto;
+using MagicVilla_Web.Models.VM;
 using MagicVilla_Web.Services.Interfaces;
 
 namespace MagicVilla_Web.Services
@@ -9,14 +10,13 @@ namespace MagicVilla_Web.Services
     public class VillaNumberService:BaseService, IVillaNumberService
     {
             private string url;
-            private readonly IBaseService _service;
 
             public VillaNumberService(IMapper mapper, IHttpClientFactory httpClientFactory, IConfiguration configuration) : base(httpClientFactory)
             {
-                
+
             //_service = service;
-                url = configuration.GetValue<string>("ServiceUrls:VillaAPI");
-            }
+            url = configuration.GetValue<string>("ServiceUrls:VillaAPI");
+        }
 
             public Task<T> CreateAsync<T>(VillaNumberCreateDto villaNumberCreateDto,string token)
             {
@@ -59,11 +59,11 @@ namespace MagicVilla_Web.Services
                 });
             }
 
-            public Task<T> UpdateAsync<T>(VillaNumberUpdateDto villaNumberUpdateDto, string token)
+            public Task<T> UpdateAsync<T>(VillaNumberUpdateVM villaNumberUpdateDto, string token)
             {
                 return sendAsync<T>(new APIRequest
                 {
-                    url = url + "api/VillaNumberAPI/" + villaNumberUpdateDto.VillaId,
+                    url = url + "api/VillaNumberAPI/" + villaNumberUpdateDto.updateDto.VillaId,
                     apiType = SD.APIType.PUT,
                     Data = villaNumberUpdateDto,
                     Token= token

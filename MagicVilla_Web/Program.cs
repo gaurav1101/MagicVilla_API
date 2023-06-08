@@ -25,7 +25,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();  //s
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(100);
+    options.IdleTimeout = TimeSpan.FromMinutes(1);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -36,7 +36,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
               .AddCookie(options =>
               {
                   options.Cookie.HttpOnly = true;
-                  options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                  options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
                   options.LoginPath = "/Auth/Login";
                   options.AccessDeniedPath = "/Auth/AccessDenied";
                   options.SlidingExpiration = true;

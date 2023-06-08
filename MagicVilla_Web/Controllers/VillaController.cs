@@ -33,15 +33,14 @@ namespace MagicVilla_Web.Controllers
             return View(villaDtos);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateVilla()
         {
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+       
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateVilla(VillaCreateDto dto)
         {
             if (ModelState.IsValid)
@@ -56,9 +55,9 @@ namespace MagicVilla_Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-       // [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
+        //[HttpPost]
+        // [ValidateAntiForgeryToken]0
         public async Task<IActionResult> UpdateVilla(int villaId)
         {
             var response=await _service.GetAsync<Response>(villaId, HttpContext.Session.GetString(SD.AuthToken));
@@ -71,7 +70,7 @@ namespace MagicVilla_Web.Controllers
             return NotFound();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateVilla(VillaUpdateDto dto)
@@ -87,7 +86,7 @@ namespace MagicVilla_Web.Controllers
             return NotFound();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteVilla(int villaId)
         {
             if (ModelState.IsValid)

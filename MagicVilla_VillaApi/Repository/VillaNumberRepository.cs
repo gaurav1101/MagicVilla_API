@@ -6,14 +6,17 @@ namespace MagicVilla_VillaApi.Repository
 {
     public class VillaNumberRepository : Repository<VillaNumber>,IVillaNumberRepository
     {
+        private readonly ApplicationDBContext _dBContext;
         public VillaNumberRepository(ApplicationDBContext applicationDBContext):base(applicationDBContext)
         {
-            
+            _dBContext = applicationDBContext;
         }
 
-        public Task UpdateVillaNumberAsync(VillaNumber villaNumber)
+        public async Task<VillaNumber> UpdateVillaNumberAsync(VillaNumber villaNumber)
         {
-            throw new NotImplementedException();
+                _dBContext.VillaNumbers.Update(villaNumber);
+                await _dBContext.SaveChangesAsync();
+                return villaNumber;
         }
     }
 }

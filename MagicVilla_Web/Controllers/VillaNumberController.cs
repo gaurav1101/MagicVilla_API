@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using MagicVilla_Utility;
+using MagicVilla_VillaApi.Models.Dto;
+using MagicVilla_VillaApi.Models;
 using MagicVilla_Web.Models;
 using MagicVilla_Web.Models.Dto;
 using MagicVilla_Web.Models.VM;
@@ -8,7 +10,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Response = MagicVilla_Web.Models.Response;
+using VillaNumberDto = MagicVilla_Web.Models.Dto.VillaNumberDto;
+using VillaDto = MagicVilla_Web.Models.Dto.VillaDto;
+using MagicVilla_Web.Services;
+using VillaNumberCreateDto = MagicVilla_Web.Models.Dto.VillaNumberCreateDto;
+using VillaNumberUpdateDto = MagicVilla_Web.Models.Dto.VillaNumberUpdateDto;
 
 namespace MagicVilla_Web.Controllers
 {
@@ -36,7 +46,7 @@ namespace MagicVilla_Web.Controllers
             return View(villaDtos);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateVillaNumber()
         {
             var response = await _villa.GetAllAsync<Response>(HttpContext.Session.GetString(SD.AuthToken));
@@ -53,8 +63,8 @@ namespace MagicVilla_Web.Controllers
             return View(createDtoVm);
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
+        //[Authorize(Roles = "admin")]
+        //[HttpPost]
         public async Task<IActionResult> CreateVillaNumber(VillaNumberCreateVM vm)
         {
             if (ModelState.IsValid)
@@ -78,7 +88,7 @@ namespace MagicVilla_Web.Controllers
                         {
                             Text = i.Name,
                             Value = i.Id.ToString()
-                        }); ;
+                        }); 
                     return View(createDtoVm);
                 }
             }
@@ -86,29 +96,47 @@ namespace MagicVilla_Web.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> UpdateVillaNumber(int Id)
+        [Authorize(Roles = "admin")]
+        
+        //[ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> UpdateVillaNumber(int VillaNo)
         {
             if (ModelState.IsValid)
             {
-                var response = await _numberService.GetAsync<Response>(Id, HttpContext.Session.GetString(SD.AuthToken));
+                var response = await _numberService.GetAsync<Response>(VillaNo, HttpContext.Session.GetString(SD.AuthToken));
+                VillaNumberUpdateVM villaNumberUpdateVM=new();
                 if (response != null && response.IsSuccess)
                 {
-                    return RedirectToAction(nameof(IndexVillaNumber));
+
+                    var dto = JsonConvert.DeserializeObject<VillaNumberUpdateDto>(Convert.ToString(response.Result));
+                    villaNumberUpdateVM.updateDto
+                    = _mapper.Map<VillaNumberUpdateDto>(dto);
+                    //return View(villaNumberCreateVM);
                 }
-                return View(response);
+                response = await _villa.GetAllAsync<Response>(HttpContext.Session.GetString(HttpContext.Session.GetString(SD.AuthToken)));
+                if (response != null && response.IsSuccess)
+                {
+                    villaNumberUpdateVM.VillaList = JsonConvert.DeserializeObject<List<VillaDto>>
+                        (Convert.ToString(response.Result)).Select(i => new SelectListItem
+                        {
+                            Text = i.Name,
+                            Value = i.Id.ToString()
+                        });
+                    return View(villaNumberUpdateVM);
+                }
+                return RedirectToAction(nameof(IndexVillaNumber));
             }
             return View();
         }
-
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateVillaNumber(VillaNumberUpdateDto update)
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> UpdateVillaNumber(VillaNumberUpdateVM update)
         {
             var response = await _numberService.UpdateAsync<Response>(update, HttpContext.Session.GetString(SD.AuthToken));
-            VillaNumberCreateVM createDtoVm = new();
-        
-            return View(createDtoVm);
+            var dto = JsonConvert.DeserializeObject<VillaNumberUpdateVM>(Convert.ToString(response.Result));
+
+            return View(dto);
         }
     }
 }

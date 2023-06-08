@@ -59,7 +59,7 @@ namespace MagicVilla_VillaApi.Repository
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString()) ,  //need key and values per claim
+                    new Claim(ClaimTypes.Name, user.UserName) ,  //need key and values per claim
                     new Claim(ClaimTypes.Role, roles.FirstOrDefault())
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
@@ -70,7 +70,6 @@ namespace MagicVilla_VillaApi.Repository
             LoginResponseDto loginResponse = new LoginResponseDto
             {
                 Token = tokenhandler.WriteToken(token),  //to convert token to string
-                Role = roles.FirstOrDefault(),
                 User =new UserDto()
                 {
                     applicationUser= user,

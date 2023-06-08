@@ -54,7 +54,7 @@ namespace MagicVilla_Web.Services
                 HttpResponseMessage httpResponse = null; 
                 httpResponse = await client.SendAsync(httpRequest);
                 var apiContent = await httpResponse.Content.ReadAsStringAsync();
-                
+                 
                 try
                 {
                     var apiResponse = JsonConvert.DeserializeObject<Response>(apiContent);

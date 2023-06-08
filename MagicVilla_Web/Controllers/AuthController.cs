@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace MagicVilla_Web.Controllers
@@ -32,7 +33,7 @@ namespace MagicVilla_Web.Controllers
         }
 
         [HttpPost]
-       
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginRequestDto loginRequestDto)
         {
             var user= await _authService.LoginAsync<Response>(loginRequestDto);
@@ -40,11 +41,14 @@ namespace MagicVilla_Web.Controllers
             if (user.Result!=null && user.IsSuccess)
             {
                 var res = JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(user.Result));
+                // we got token in response to retrive role and user name from token
+                var handler = new JwtSecurityTokenHandler();
+                var jwt = handler.ReadJwtToken(res.Token);
 
-                //To enable auth after program.cs use below code
+                //To enable auth , after program.cs use below code
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-                identity.AddClaim(new Claim(ClaimTypes.Name, res.User.UserName));
-                identity.AddClaim(new Claim(ClaimTypes.Role, res.User.Role));
+                identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(u => u.Type == "unique_name").Value));
+                identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u=>u.Type=="role").Value));
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                 ///////
@@ -60,14 +64,12 @@ namespace MagicVilla_Web.Controllers
         }
 
         [HttpGet]
-       
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterationRequestDto registerationRequestDto)
         {
             var user = await _authService.RegisterAsync<Response>(registerationRequestDto);
